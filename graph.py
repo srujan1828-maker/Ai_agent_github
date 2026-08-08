@@ -194,7 +194,7 @@ Diffs:
 Respond with a JSON object containing an "issues" array. Each issue must have:
 - "severity": one of "critical", "high", "medium", "low"
 - "file": the filename where the issue is found
-- "line": approximate line number in the new file
+- "line": approximate line number in the new file; use 1 if unknown, never null
 - "description": clear description of the {analysis_type} issue
 - "suggested_fix": actionable fix suggestion
 
@@ -223,7 +223,7 @@ async def _run_analysis(
                 type=issue_type,
                 severity=Severity(i.severity.lower()),
                 file=i.file,
-                line=i.line,
+                line=i.line or 1,
                 description=i.description,
                 suggested_fix=i.suggested_fix,
             )

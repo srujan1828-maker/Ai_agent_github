@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field, field_validator
 class ExecutionStatus(str, Enum):
     SUCCESS = "success"
     TEST_FAILURES = "test_failures"
+    TIMEOUT = "timeout"
+    SANDBOX_ERROR = "sandbox_error"
 
 
 class TestFailure(BaseModel):
@@ -96,9 +98,16 @@ class LLMIssue(BaseModel):
 
     severity: str
     file: str
-    line: int
+    line: Optional[int] = 1
     description: str
     suggested_fix: str
+
+    @field_validator("line", mode="before")
+    @classmethod
+    def default_line(cls, value):
+        if value is None:
+            return 1
+        return value
 
 
 class LLMAnalysisResult(BaseModel):
