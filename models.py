@@ -24,16 +24,19 @@ class TestResults(BaseModel):
 
 class ExecutionResult(BaseModel):
     status: ExecutionStatus
-    exit_code: int
-    stdout: str = ""
-    stderr: str = ""
+    exit_code: Optional[int] = None
+    execution_time_ms: Optional[int] = None
+    resource_usage: Optional[dict] = None
+    stdout: Optional[str] = ""
+    stderr: Optional[str] = ""
+    diff: Optional[str] = None
     files_changed: list[str] = Field(default_factory=list)
-    test_results: TestResults = Field(default_factory=TestResults)
+    test_results: Optional[TestResults] = None
 
 
 class RepoContext(BaseModel):
     language: str
-    framework: str
+    framework: Optional[str] = None
 
 
 class AnalyzeRequest(BaseModel):
